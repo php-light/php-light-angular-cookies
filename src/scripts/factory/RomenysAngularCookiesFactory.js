@@ -6,23 +6,32 @@
  */
 
 romenyAngularCookies.factory('RomenysAngularCookiesFactory', function () {
-    var RomenysAngularCookiesFactory = {};
+    var RomenysAngularCookiesFactory = {
+        cookies: {}
+    };
 
     /**
      * Set cookie
      * @param name
      * @param value
      * @param expiration In milliseconds
+     * @param path Defaults to /
      *
      * @return RomenysAngularCookiesFactory
      */
-    RomenysAngularCookiesFactory.set = function (name, value, expiration) {
-        var date = new Date();
-        date.setTime(date.getTime() + (expiration));
-        var expires = "expires="+ date.toLocaleDateString();
-        document.cookie = name + "=" + value + ";" + expires + ";path=/";
+    RomenysAngularCookiesFactory.set = function (name, value, expiration, path) {
+        path = path === undefined ? '/' : path;
 
-        return RomenysAngularCookiesFactory;
+        var date = new Date();
+        date.setTime(date.getTime() + (expiration*60*60*24));
+        var expires = 'expires='+ date.toLocaleDateString();
+        document.cookie = name + '=' + value + ';' + expires + ';path=' + path;
+
+        setTimeout(function () {
+            if (RomenysAngularCookiesFactory.get("token")) {
+                return true;
+            }
+        }, 800);
     };
 
     /**
