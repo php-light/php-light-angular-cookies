@@ -42,18 +42,26 @@ romenyAngularCookies.factory('RomenysAngularCookiesFactory', function () {
     RomenysAngularCookiesFactory.get = function (name) {
         var decodedCookie = decodeURIComponent(document.cookie);
         var cookies = decodedCookie.split(';');
+        var value = "";
         name = name + "=";
+
         angular.forEach(cookies, function (cookie) {
             while (cookie.charAt(0) == ' ') {
                 cookie = cookie.substring(1);
             }
 
             if (cookie.indexOf(name) == 0) {
-                return cookie.substring(name.length, cookie.length);
+                value = cookie.substring(name.length, cookie.length);
             }
         });
 
-        return "";
+        return value;
+    };
+
+    RomenysAngularCookiesFactory.delete = function (name, path) {
+        path = path === undefined || path === null ? '/' : path;
+
+        document.cookie = name + '=' + ';0' + ';path=' + path;
     };
 
     return RomenysAngularCookiesFactory;
